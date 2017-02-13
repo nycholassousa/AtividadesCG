@@ -12,6 +12,16 @@ void MyGlDraw(void)
 	//*************************************************************************
 
 Pixel tempPixel;
+tempPixel = createPixel(20, 30, 255, 255, 255, 0, tempPixel);
+putPixel(tempPixel);
+
+tempPixel = createPixel(30, 30, 255, 0, 0, 0, tempPixel);
+putPixel(tempPixel);
+tempPixel = createPixel(40, 30, 0, 255, 0, 0, tempPixel);
+putPixel(tempPixel);
+tempPixel = createPixel(50, 30, 0, 0, 255, 0, tempPixel);
+putPixel(tempPixel);
+
 
 /* 
 for(int i = 0; i < 60; i++) {       // white line
@@ -37,7 +47,7 @@ for(int i = 0; i < 256; i++) {
     }
 } */
 
-drawFilledCircle(150, 150, 100, 255, 255, 255, 0);
+//drawFilledCircle(150, 150, 100, 255, 255, 255, 0);
 
 	
 

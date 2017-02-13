@@ -204,7 +204,7 @@ void drawTriangle(Pixel p1, Pixel p2, Pixel p3)
     drawLine(p3, p1);
 }
 
-// Desenha um circulo na tela
+//Desenha um circulo na tela
 void drawCircle(int pos_x, int pos_y, int radius, 
 	unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
@@ -245,6 +245,7 @@ void drawCircle(int pos_x, int pos_y, int radius,
     }
 }
 
+//Desenha o círculo preenchido na tela
 void drawFilledCircle(int pos_x, int pos_y, int radius,
 	unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
