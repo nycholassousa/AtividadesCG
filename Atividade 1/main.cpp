@@ -12,7 +12,6 @@ void MyGlDraw(void)
 	//*************************************************************************
 
 Pixel tempPixel;
-
 for(int i = 0; i < 60; i++) {       // white line
     tempPixel = createPixel(19, 30+i, 255, 255, 255, 0, tempPixel);
     putPixel(tempPixel);
