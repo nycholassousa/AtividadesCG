@@ -111,10 +111,12 @@ Agora podemos notar mais ainda a diferença. Interassante ver que parece desalin
 Com o ponto/pixel criado, podemos fazer uma reta, que é um conjunto de pontos/pixels alinhados. Para isso, utilizaremos a função *drawLine*, e a base do algoritmo se dá da seguinte forma: baseia-se no argumento de que um segmento de reta, ao ser destacado, deve ser contínuo. O algoritmo baseia-se no critério do ponto médio. Onde, para cada coluna de píxeis existem dois píxeis que se encontram mais próximos da reta, um abaixo e outro acima desta. A escolha do pixel a ser destacado, é feita através da distância da interseção da reta com a coluna de píxeis a cada um dos dois píxeis, escolhendo-se então o pixel mais próximo da interseção. Os pixels que compõem um segmento de reta devem ser vizinhos, o que permite visualizar quais pontos numa matriz de base quadriculada que deve ser destacados para atender o grau de inclinação da reta dy/dx. Se o grau do ângulo for de 0º – 45º, nunca poderá destacar 2 pixels na mesma coluna, caso seja de 45º – 90º, nunca poderá destacar 2 pixels na mesma linha. Em outras palavras, a aproximação é feita estipulando um ponto médio, onde o pixel que mais se aproxima da reta será o próximo destacado.[2]
 
 Como exemplo, veja a imagem abaixo:
+
 ![Exemplo de como fica o algoritmo de bresenham pra um angulo de 22º](screenshots/bresenham22o.png)
 
 Esta imagem representa de como a linha fica quando a reta possui 22º
 
 ## Referências
 [1] https://pt.wikipedia.org/wiki/Rasteriza%C3%A7%C3%A3o
+
 [2] http://www.univasf.edu.br/~jorge.cavalcanti/comput_graf04_prim_graficas2.pdf
