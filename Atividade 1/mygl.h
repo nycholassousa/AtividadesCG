@@ -151,11 +151,11 @@ void drawLine(Pixel pixelInitial, Pixel pixelFinal) {
 }
 
 //Draw Triangle
-void drawTriangle(Pixel pixelFinal, Pixel p2, Pixel p3)
+void drawTriangle(Pixel p1, Pixel p2, Pixel p3)
 {
-    drawLine(pixelFinal, p2);
+    drawLine(p1, p2);
     drawLine(p2, p3);
-    drawLine(p3, pixelFinal);
+    drawLine(p3, p1);
 }
 
 //DrawFilled Circle
