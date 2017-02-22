@@ -1,8 +1,36 @@
 #include "main.h"
 
-//Apenas pra lembrar como inserir gif no markdown
-//![](http://www.reactiongifs.us/wp-content/uploads/2013/10/nuh_uh_conan_obrien.gif)
+void bresenhamDemo(){
+    Pixel pixel1  = createPixel((IMAGE_WIDTH-1)/2, 0, 255, 0, 0, 255, pixel1);
+    Pixel pixel2  = createPixel((IMAGE_WIDTH-1)/2, IMAGE_HEIGHT-1, 255, 255, 0, 255, pixel2);
 
+    Pixel pixel3  = createPixel(0, (IMAGE_HEIGHT-1)/2, 0, 255, 0, 255, pixel3);
+    Pixel pixel4  = createPixel(IMAGE_WIDTH-1, (IMAGE_HEIGHT-1)/2, 0, 255, 255, 255, pixel4);
+
+    Pixel pixel5  = createPixel(0, 0, 0, 255, 255, 255, pixel5);
+    Pixel pixel6  = createPixel(IMAGE_WIDTH-1, IMAGE_HEIGHT-1, 0, 0, 255, 255, pixel6);
+
+    Pixel pixel7  = createPixel(0, IMAGE_HEIGHT-1, 0, 0, 255, 255, pixel7);
+    Pixel pixel8  = createPixel(IMAGE_WIDTH-1, 0, 255, 0, 255, 255, pixel8);
+
+    drawLine(pixel1, pixel2);
+    drawLine(pixel3, pixel4);
+    drawLine(pixel5, pixel6);
+    drawLine(pixel7, pixel8);
+}
+
+void triangleDemo(){
+    Pixel pixel1  = createPixel((IMAGE_WIDTH-1)/2, 0, 255, 0, 0, 255, pixel1);
+    Pixel pixel2  = createPixel((IMAGE_WIDTH-1)/2, IMAGE_HEIGHT-1, 255, 255, 0, 255, pixel2);
+    Pixel pixel3  = createPixel(0, (IMAGE_HEIGHT-1)/2, 0, 255, 0, 255, pixel3);
+
+    drawTriangle(pixel1, pixel2, pixel3);
+}
+
+void drawFilledCircleDemo(){
+    Pixel center = createPixel(IMAGE_WIDTH/2, IMAGE_HEIGHT/2, 255, 255, 0, 255, center);
+    drawFilledCircle(center, 100);
+}
 
 //-----------------------------------------------------------------------------
 void MyGlDraw(void)
@@ -11,38 +39,9 @@ void MyGlDraw(void)
 	// Chame aqui as funções do mygl.h
 	//*************************************************************************
 
-Pixel pixel1 = createPixel(19, 30, 255, 0, 0, 0, pixel1);
-Pixel pixel2 = createPixel(100, 30, 0, 255, 0, 0, pixel2);
-
-drawLine(pixel1, pixel2);
-
-/* for(int i = 0; i < 60; i++) {       // white line
-    tempPixel = createPixel(19, 30+i, 255, 255, 255, 0, tempPixel);
-    putPixel(tempPixel);
-}
- 
-for(int i = 0; i < 256; i++) {
-    int j;
-    for(j = 0; j < 20; j++) {        // all levels of RED
-        tempPixel = createPixel(20+i, 30+j, i, 0, 0, 0, tempPixel);
-        putPixel(tempPixel);
-    }
-     
-    for( ; j < 40; j++) {        // all levels of GREEN
-        tempPixel = createPixel(20+i, 30+j, 0, i, 0, 0, tempPixel);
-        putPixel(tempPixel);
-    }
- 
-    for( ; j < 60; j++) {        // all levels of BLUE
-        tempPixel = createPixel(20+i, 30+j, 0, 0, i, 0, tempPixel);
-        putPixel(tempPixel);
-    }
-}
-
-//drawFilledCircle(150, 150, 100, 255, 255, 255, 0); */
-
-	
-
+    //bresenhamDemo();
+    //triangleDemo();
+    drawFilledCircleDemo();
 
 }
 

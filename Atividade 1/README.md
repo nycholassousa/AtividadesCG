@@ -116,86 +116,198 @@ Como exemplo, veja a imagem abaixo:
 
 Esta imagem representa de como a linha fica quando a reta possui 22º
 
-Começando o algoritmos de desenhar linha, primeiro, devemos fazer umas contas simples pra que a interpolação ocorra e para termos a variação de X e Y:
+Devido a extensão do código, dividirei em duas partes a explicação, mas antes disso, segue a base da função:
 
-	    int delta_x = pixelFinal.pos_x - pixelInitial.pos_x;
-	    int delta_y = pixelFinal.pos_y - pixelInitial.pos_y;
-
-	    float delta_x_red = ((float)pixelFinal.color[RED]   - pixelInitial.color[RED])/delta_x;
-	    float delta_x_green = ((float)pixelFinal.color[GREEN] - pixelInitial.color[GREEN])/delta_x;
-	    float delta_x_blue = ((float)pixelFinal.color[BLUE]  - pixelInitial.color[BLUE])/delta_x;
-	    float delta_x_alpha = ((float)pixelFinal.color[ALPHA] - pixelInitial.color[ALPHA])/delta_x;
-
-	    float delta_y_red = ((float)pixelFinal.color[RED]   - pixelInitial.color[RED])/delta_y;
-	    float delta_y_green = ((float)pixelFinal.color[GREEN] - pixelInitial.color[GREEN])/delta_y;
-	    float delta_y_blue = ((float)pixelFinal.color[BLUE]  - pixelInitial.color[BLUE])/delta_y;
-	    float delta_y_alpha = ((float)pixelFinal.color[ALPHA] - pixelInitial.color[ALPHA])/delta_y;
-
-   
-Após as definições, a primeira coisa que é feita, é a impressão da linha em forma de coluna, da seguinte maneira:
-
-    if (delta_x == 0){ //coluna
-    	if (pixelFinal.pos_y > pixelInitial.pos_y){
-        	putPixel(pixelAux);
-        	for (int i = pixelInitial.pos_y; i <= pixelFinal.pos_y; i++){
-            	pixelAux.color[RED]   += (char)delta_y_red;
-            	pixelAux.color[GREEN] += (char)delta_y_green;
-            	pixelAux.color[BLUE]  += (char)delta_y_blue;
-            	pixelAux.color[ALPHA] += (char)delta_y_alpha;
-            	pixelAux.pos_y = i;
-            	putPixel(pixelAux);
-        	}
-    	} else {
-        	putPixel(pixelAux);
-        	for (int i = pixelFinal.pos_y; i <= pixelInitial.pos_y; i++){
-            	pixelAux.color[RED]   += (char)delta_y_red;
-            	pixelAux.color[GREEN] += (char)delta_y_green;
-            	pixelAux.color[BLUE]  += (char)delta_y_blue;
-            	pixelAux.color[ALPHA] += (char)delta_y_alpha;
-            	pixelAux.pos_y = i;
-            	putPixel(pixelAux);
-        	}
-    	}
-    	return;
-	}
-
-Esse trecho imprime os pixels em forma de coluna, como pode ser visto, em nenhum momento a posição X é alterada, apenas o Y, seja de "baixo para cima" ou de "cima para baixo".
-
-![DrawLine em forma de coluna (delta_X == 0)](screenshots/drawline_coluna.JPG)
-
-Com a coluna feita, podemos fazer a impressão agora sendo realmente uma linha, ou seja, não há variação em Y, só há variação em X, veja o trecho do código que corresponde a isso:
-
-	if (delta_y == 0){ //linha
-        if (pixelFinal.pos_x > pixelInitial.pos_x){
-            putPixel(pixelAux);
-            for (int i = pixelInitial.pos_x; i <= pixelFinal.pos_x; i++){
-                pixelAux.color[RED]   += (char)delta_x_red;
-                pixelAux.color[GREEN] += (char)delta_x_green;
-                pixelAux.color[BLUE]  += (char)delta_x_blue;
-                pixelAux.color[ALPHA] += (char)delta_x_alpha;
-                pixelAux.pos_x = i;
-                putPixel(pixelAux);
-            }
-        } else {
-            putPixel(pixelAux);
-            for (int i = pixelFinal.pos_x; i <= pixelInitial.pos_x; i++){
-                pixelAux.color[RED]   += (char)delta_x_red;
-                pixelAux.color[GREEN] += (char)delta_x_green;
-                pixelAux.color[BLUE]  += (char)delta_x_blue;
-                pixelAux.color[ALPHA] += (char)delta_x_alpha;
-                pixelAux.pos_x = i;
-                putPixel(pixelAux);
-            }
-        }
-        return;
+    int delta_x = pixelFinal.pos_x - pixelInitial.pos_x; //calculo de delta
+    int delta_y = pixelFinal.pos_y - pixelInitial.pos_y; //calculo de delta
+    int d, incDPos, incDNeg; //variaveis
+     
+    if(delta_x < 0) {     
+        std::swap(pixelInitial, pixelFinal) //swap caso a ordem seja o contrário
+        delta_x = -delta_x;
+        delta_y = -delta_y;
     }
 
-Similar à impressão de coluna, esse trecho imprime os pixels lado a lado, mantendo o valor de Y e alterando apenas o valor de X.
+     
+    int dySig = (delta_y < 0)?(-1):1; //alteração do delta Y
+     
+    Pixel pixelAuxiliar = pixelInitial; //Pixel auxiliar
+    putPixel(pixelInitial); //Impressao do primeiro pixel
 
-![DrawLine em forma de linha (delta_Y == 0)](screenshots/drawline_linha.JPG)
+Com isso, vamos a explicação por coeficiente angular:
+
+#### Para todo coeficiente angular menor ou igual a 1 (|m| <= 1)
+
+	if( dySig*delta_y <= delta_x ) { //|m| <= 1
+        if(delta_y < 0) {
+            d = 2*delta_y + delta_x;            // d_first
+            while(pixelAuxiliar.pos_x < pixelFinal.pos_x) { //for each x
+                if(d < 0) { // midpoint ABOVE the line
+                    d += 2*(delta_y + delta_x);
+                    pixelAuxiliar.pos_x++;
+                    pixelAuxiliar.pos_y--;
+                } else { // midpoint BELOW the line
+                    d += 2*delta_y;
+                    pixelAuxiliar.pos_x++;
+                }
+                for(int i = RED; i <= ALPHA; i++) { //for each component, interpolate
+                    pixelAuxiliar.color[i] = (unsigned char)(pixelInitial.color[i] + (pixelAuxiliar.pos_x - pixelInitial.pos_x)*(pixelFinal.color[i] - pixelInitial.color[i])/delta_x);
+                }
+                putPixel(pixelAuxiliar);
+            }
+        } else {
+            d = 2*delta_y - delta_x; //d_first
+            while(pixelAuxiliar.pos_x < pixelFinal.pos_x) { //for each x
+                if(d < 0) { //midpoint BELOW the line
+                    d += 2*delta_y;
+                    pixelAuxiliar.pos_x++;
+                } else { //midpoint ABOVE the line
+                    d += 2*(delta_y - delta_x);
+                    pixelAuxiliar.pos_x++;
+                    pixelAuxiliar.pos_y++;
+                }
+                for(int i = RED; i <= ALPHA; i++) { //for each component, interpolate
+                    pixelAuxiliar.color[i] = (unsigned char)(pixelInitial.color[i] + (pixelAuxiliar.pos_x - pixelInitial.pos_x)*(pixelFinal.color[i] - pixelInitial.color[i])/delta_x);
+                }
+                putPixel(pixelAuxiliar);
+            }
+        }
+    }
+
+O código em si possui comentários explicando a representação de cada parte
+
+#### Para todo coeficiente angular maior que 1 (|m| > 1)
+
+	else { //|m| > 1        
+        if(delta_y < 0) {
+            d = delta_y + 2*delta_x; //d_first
+            while( pixelAuxiliar.pos_y > pixelFinal.pos_y ) { //for each y
+                if(d < 0) { //midpoint ABOVE the line
+                    d += 2*delta_x;
+                    pixelAuxiliar.pos_y--;
+                } else { //midpoint BELOW the line
+                    d += 2*(delta_y + delta_x);
+                    pixelAuxiliar.pos_x++;
+                    pixelAuxiliar.pos_y--;
+                }
+                for(int i = RED; i <= ALPHA; i++) { //for each component, interpolate
+                    pixelAuxiliar.color[i] = (unsigned char)(pixelInitial.color[i] + (pixelAuxiliar.pos_y - pixelInitial.pos_y)*(pixelFinal.color[i] - pixelInitial.color[i])/delta_y);
+                }
+                putPixel(pixelAuxiliar);
+            }
+        } else {
+            d = delta_y -2*delta_x; //d_first
+            while( pixelAuxiliar.pos_y < pixelFinal.pos_y ) { //for each y
+                if(d < 0) { //midpoint BELOW the line
+                    d += 2*(delta_y - delta_x);
+                    pixelAuxiliar.pos_x++;
+                    pixelAuxiliar.pos_y++;
+                } else { //midpoint ABOVE the line
+                    d += -2*delta_x;
+                    pixelAuxiliar.pos_y++;
+                }
+                for(int i = RED; i <= ALPHA; i++) { //for each component, interpolate
+                    pixelAuxiliar.color[i] = (unsigned char)(pixelInitial.color[i] + (pixelAuxiliar.pos_y - pixelInitial.pos_y)*(pixelFinal.color[i] - pixelInitial.color[i])/delta_y);
+                }
+                putPixel(pixelAuxiliar);
+            }
+        }
+    }
+
+Após tudo isso, faz-se a impressão do último pixel:
+
+	putPixel(pixelFinal);
+
+Com isso, este é o nosso resultado final:
+
+![Impressão de retas nos 8 ocatantes](screenshots/bresenham_complete.jpg)
+
+
+### Criando triângulos
+Triângulo nada mais é que 3 vértices ligadas, então, apenas devemos ter 3 pixels e liga-los usando o drawLine:
+
+	void drawTriangle(Pixel pixelFinal, Pixel p2, Pixel p3)
+	{
+	    drawLine(pixelFinal, p2);
+	    drawLine(p2, p3);
+	    drawLine(p3, pixelFinal);
+	}
+
+Assim, segue uma imagem de exemplo de como ficou:
+
+![Triangulo](screenshots/drawtriangle.jpg)
+
+### Interpolação nas retas
+
+Apesar de nas imagens já mostrar com as retas interpoladas, eu quis fazer essa seção pra explicar melhor como foi que funcionou.
+
+Interpolação é "o método que permite construir um novo conjunto de dados a partir de um conjunto discreto de dados pontuais previamente conhecidos. (...) Através da interpolação, pode-se construir uma função que aproximadamente se 'encaixe' nestes dados pontuais, conferindo-lhes, então, a continuidade desejada"[3].
+
+Para isso, foi usado o seguinte código:
+
+	for(int i = RED; i <= ALPHA; i++) {    // for each component, interpolate
+		pixelAuxiliar.color[i] = (unsigned char)(pixelInitial.color[i] + (pixelAuxiliar.pos_x - pixelInitial.pos_x)*(pixelFinal.color[i] - pixelInitial.color[i])/delta_x);
+	}
+
+Ela usa os dois pixels que definem a linha (extremidades), e o pixel auxiliar que está sendo processado dentro da função DrawLine.
+
+## Extras
+
+Com a sobra de tempo, resolvi fazer um extra: Criar um círculo e dentro dele ser preenchido.
+
+Para começar, pensei que a melhor forma de preencher era: fazendo linha a linha dele, começando de uma extremidade e indo até outra. Porém, isso demoraria um pouco mais do que planejado... Com isso, pensei em: faço 4 pontos cardeais do circulo até se encontrarem, depois, preencho o restante. Como assim? Veja abaixo o código:
+
+float sinus = 0.70710678118;
+
+    Pixel pixelAuxiliar;
+
+    //This is the distance on the axis from sin(90) to sin(45). 
+    int range = radius/(2*sinus);
+    for(int i = radius ; i >= range ; --i)
+    {
+        int j = sqrt(radius*radius - i*i);
+        for(int k = -j ; k <= j ; k++)
+        {
+            //We draw all the 4 sides at the same time.
+            pixelAuxiliar = createPixel(centerPos.pos_x - k, centerPos.pos_y + i, centerPos.color[RED], centerPos.color[GREEN], centerPos.color[BLUE], centerPos.color[ALPHA], pixelAuxiliar);
+            putPixel(pixelAuxiliar);
+            pixelAuxiliar = createPixel(centerPos.pos_x - k, centerPos.pos_y - i, centerPos.color[RED], centerPos.color[GREEN], centerPos.color[BLUE], centerPos.color[ALPHA], pixelAuxiliar);
+            putPixel(pixelAuxiliar);
+            pixelAuxiliar = createPixel(centerPos.pos_x + i, centerPos.pos_y + k, centerPos.color[RED], centerPos.color[GREEN], centerPos.color[BLUE], centerPos.color[ALPHA], pixelAuxiliar);
+            putPixel(pixelAuxiliar);
+            pixelAuxiliar = createPixel(centerPos.pos_x - i, centerPos.pos_y - k, centerPos.color[RED], centerPos.color[GREEN], centerPos.color[BLUE], centerPos.color[ALPHA], pixelAuxiliar);
+            putPixel(pixelAuxiliar);
+        }
+    }
+
+Como no comentário, esse trecho mais desenhar os 4 "lados" de um circulo ao mesmo tempo, executando somente esse trecho, fica a seguinte imagem:
+
+![Filled Circle 1](screenshots/filledcircle1.jpg)
+
+Assim, resta-nos o mais fácil, que é desenhar o quadrado dentro. Com isso, fiz o seguinte código:
+
+	//To fill the circle we draw the circumscribed square.
+    range = radius*sinus;
+    for(int i = centerPos.pos_x - range + 1 ; i < centerPos.pos_x + range ; i++)
+    {
+        for(int j = centerPos.pos_y - range + 1 ; j < centerPos.pos_y + range ; j++)
+        {
+            pixelAuxiliar = createPixel(i, j, centerPos.color[RED], centerPos.color[GREEN], centerPos.color[BLUE], centerPos.color[ALPHA], pixelAuxiliar);
+            putPixel(pixelAuxiliar);
+        }
+    }
+
+![Filled Circle - Completo](screenshots/filledcircle2.jpg)
+
+Com isso, todo o círculo está preenchido. A chamada da função foi o seguinte:
+
+	drawFilledCircle(Pixel centerPos, int radius);
+
 
 
 ## Referências
 [1] https://pt.wikipedia.org/wiki/Rasteriza%C3%A7%C3%A3o
 
 [2] http://www.univasf.edu.br/~jorge.cavalcanti/comput_graf04_prim_graficas2.pdf
+
+[3] https://pt.wikipedia.org/wiki/Interpola%C3%A7%C3%A3o
