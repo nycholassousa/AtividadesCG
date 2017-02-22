@@ -257,8 +257,7 @@ Com a sobra de tempo, resolvi fazer um extra: Criar um círculo e dentro dele se
 
 Para começar, pensei que a melhor forma de preencher era: fazendo linha a linha dele, começando de uma extremidade e indo até outra. Porém, isso demoraria um pouco mais do que planejado... Com isso, pensei em: faço 4 pontos cardeais do circulo até se encontrarem, depois, preencho o restante. Como assim? Veja abaixo o código:
 
-float sinus = 0.70710678118;
-
+	float sinus = 0.70710678118;
     Pixel pixelAuxiliar;
 
     //This is the distance on the axis from sin(90) to sin(45). 
