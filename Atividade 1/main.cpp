@@ -11,8 +11,12 @@ void MyGlDraw(void)
 	// Chame aqui as funções do mygl.h
 	//*************************************************************************
 
-Pixel tempPixel;
-for(int i = 0; i < 60; i++) {       // white line
+Pixel pixel1 = createPixel(19, 30, 255, 0, 0, 0, pixel1);
+Pixel pixel2 = createPixel(100, 30, 0, 255, 0, 0, pixel2);
+
+drawLine(pixel1, pixel2);
+
+/* for(int i = 0; i < 60; i++) {       // white line
     tempPixel = createPixel(19, 30+i, 255, 255, 255, 0, tempPixel);
     putPixel(tempPixel);
 }
@@ -35,7 +39,7 @@ for(int i = 0; i < 256; i++) {
     }
 }
 
-//drawFilledCircle(150, 150, 100, 255, 255, 255, 0);
+//drawFilledCircle(150, 150, 100, 255, 255, 255, 0); */
 
 	
 

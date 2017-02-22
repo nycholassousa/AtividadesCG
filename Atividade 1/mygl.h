@@ -100,7 +100,7 @@ void drawLine(Pixel pixelInitial, Pixel pixelFinal)
         }
         return;
     }
-    if (delta_y == 0){ //coluna
+    if (delta_y == 0){ //linha
         if (pixelFinal.pos_x > pixelInitial.pos_x){
             putPixel(pixelAux);
             for (int i = pixelInitial.pos_x; i <= pixelFinal.pos_x; i++){

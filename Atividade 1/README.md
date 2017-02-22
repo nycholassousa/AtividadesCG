@@ -116,6 +116,85 @@ Como exemplo, veja a imagem abaixo:
 
 Esta imagem representa de como a linha fica quando a reta possui 22º
 
+Começando o algoritmos de desenhar linha, primeiro, devemos fazer umas contas simples pra que a interpolação ocorra e para termos a variação de X e Y:
+
+	    int delta_x = pixelFinal.pos_x - pixelInitial.pos_x;
+	    int delta_y = pixelFinal.pos_y - pixelInitial.pos_y;
+
+	    float delta_x_red = ((float)pixelFinal.color[RED]   - pixelInitial.color[RED])/delta_x;
+	    float delta_x_green = ((float)pixelFinal.color[GREEN] - pixelInitial.color[GREEN])/delta_x;
+	    float delta_x_blue = ((float)pixelFinal.color[BLUE]  - pixelInitial.color[BLUE])/delta_x;
+	    float delta_x_alpha = ((float)pixelFinal.color[ALPHA] - pixelInitial.color[ALPHA])/delta_x;
+
+	    float delta_y_red = ((float)pixelFinal.color[RED]   - pixelInitial.color[RED])/delta_y;
+	    float delta_y_green = ((float)pixelFinal.color[GREEN] - pixelInitial.color[GREEN])/delta_y;
+	    float delta_y_blue = ((float)pixelFinal.color[BLUE]  - pixelInitial.color[BLUE])/delta_y;
+	    float delta_y_alpha = ((float)pixelFinal.color[ALPHA] - pixelInitial.color[ALPHA])/delta_y;
+
+   
+Após as definições, a primeira coisa que é feita, é a impressão da linha em forma de coluna, da seguinte maneira:
+
+    if (delta_x == 0){ //coluna
+    	if (pixelFinal.pos_y > pixelInitial.pos_y){
+        	putPixel(pixelAux);
+        	for (int i = pixelInitial.pos_y; i <= pixelFinal.pos_y; i++){
+            	pixelAux.color[RED]   += (char)delta_y_red;
+            	pixelAux.color[GREEN] += (char)delta_y_green;
+            	pixelAux.color[BLUE]  += (char)delta_y_blue;
+            	pixelAux.color[ALPHA] += (char)delta_y_alpha;
+            	pixelAux.pos_y = i;
+            	putPixel(pixelAux);
+        	}
+    	} else {
+        	putPixel(pixelAux);
+        	for (int i = pixelFinal.pos_y; i <= pixelInitial.pos_y; i++){
+            	pixelAux.color[RED]   += (char)delta_y_red;
+            	pixelAux.color[GREEN] += (char)delta_y_green;
+            	pixelAux.color[BLUE]  += (char)delta_y_blue;
+            	pixelAux.color[ALPHA] += (char)delta_y_alpha;
+            	pixelAux.pos_y = i;
+            	putPixel(pixelAux);
+        	}
+    	}
+    	return;
+	}
+
+Esse trecho imprime os pixels em forma de coluna, como pode ser visto, em nenhum momento a posição X é alterada, apenas o Y, seja de "baixo para cima" ou de "cima para baixo".
+
+![DrawLine em forma de coluna (delta_X == 0)](screenshots/drawline_coluna.JPG)
+
+Com a coluna feita, podemos fazer a impressão agora sendo realmente uma linha, ou seja, não há variação em Y, só há variação em X, veja o trecho do código que corresponde a isso:
+
+	if (delta_y == 0){ //linha
+        if (pixelFinal.pos_x > pixelInitial.pos_x){
+            putPixel(pixelAux);
+            for (int i = pixelInitial.pos_x; i <= pixelFinal.pos_x; i++){
+                pixelAux.color[RED]   += (char)delta_x_red;
+                pixelAux.color[GREEN] += (char)delta_x_green;
+                pixelAux.color[BLUE]  += (char)delta_x_blue;
+                pixelAux.color[ALPHA] += (char)delta_x_alpha;
+                pixelAux.pos_x = i;
+                putPixel(pixelAux);
+            }
+        } else {
+            putPixel(pixelAux);
+            for (int i = pixelFinal.pos_x; i <= pixelInitial.pos_x; i++){
+                pixelAux.color[RED]   += (char)delta_x_red;
+                pixelAux.color[GREEN] += (char)delta_x_green;
+                pixelAux.color[BLUE]  += (char)delta_x_blue;
+                pixelAux.color[ALPHA] += (char)delta_x_alpha;
+                pixelAux.pos_x = i;
+                putPixel(pixelAux);
+            }
+        }
+        return;
+    }
+
+Similar à impressão de coluna, esse trecho imprime os pixels lado a lado, mantendo o valor de Y e alterando apenas o valor de X.
+
+![DrawLine em forma de linha (delta_Y == 0)](screenshots/drawline_linha.JPG)
+
+
 ## Referências
 [1] https://pt.wikipedia.org/wiki/Rasteriza%C3%A7%C3%A3o
 
