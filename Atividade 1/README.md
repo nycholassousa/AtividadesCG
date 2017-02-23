@@ -303,6 +303,13 @@ Com isso, todo o círculo está preenchido. A chamada da função foi o seguinte
 	drawFilledCircle(Pixel centerPos, int radius);
 
 
+## Dificuldades Encontradas
+
+Minha maior dificuldade foi na rasterização de linha nos octantes 3,4,7,8, visto que por algum motivo da reflexão, não estava sendo impresso, após refazer tudo com mais calma e me basear na imagem abaixo, consegui fazer corretamente.
+
+![Bresenham](screenshots/bresenham_functions.png)
+
+
 
 ## Referências
 [1] https://pt.wikipedia.org/wiki/Rasteriza%C3%A7%C3%A3o
