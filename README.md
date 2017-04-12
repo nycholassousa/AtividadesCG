@@ -10,3 +10,5 @@ O arquivo readme será parecido com uma postagem de blog
 
 ## Atividades propostas
 [Trabalho 1 (Familiarização com Algoritmos de Rasterização)](https://github.com/nycholassousa/AtividadesCG/tree/master/Atividade%201)
+
+[Trabalho 2 (Passo a Passo do Pipeline Gráfico)](https://github.com/nycholassousa/AtividadesCG/tree/master/Atividade%202)
