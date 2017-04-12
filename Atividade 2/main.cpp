@@ -2,10 +2,12 @@
 #include "main.h"
 #include "pipeline.h"
 
-void clearColorBuffer(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
-
 objLoader* objData;
 double angle = 0.0f;
+
+/*****************************************************************/
+void clearColorBuffer(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+/*****************************************************************/
 
 void MyGlDraw(void)
 {
@@ -23,7 +25,7 @@ void MyGlDraw(void)
 	viewportGL(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
 	
 	//Distância d do View Plane
-	viewPlaneDGL(2.4);
+	viewPlaneDGL(2.0);
 
 	//Matriz de Rotação
 	rotateGL(angle, 0.0f, 1.0f, 0.0f);
@@ -31,7 +33,7 @@ void MyGlDraw(void)
 	angle += 0.1f;
 	
 	//Limpa o Color Buffer
-	clearColorBuffer(0, 0, 0, 255);	// Limpa o frame buffer
+	clearColorBuffer(0, 0, 0, 255);
 	
 	//Cria os 3 vértices do triângulo
 	Pixel pixel[3];
@@ -40,7 +42,7 @@ void MyGlDraw(void)
 		obj_face* obj = objData->faceList[f];
 		
 		for(int i = 0; i < 3; i++) {
-			//Faz a séria de multiplicações de matrizes para obter os pontos na coordenada de tela
+			//Faz uma séria de multiplicações de matrizes para obter os pontos na coordenada de tela
 			Point p = createPipeline(
 				objData->vertexList[obj->vertex_index[i]]->e[0],
 				objData->vertexList[obj->vertex_index[i]]->e[1],
