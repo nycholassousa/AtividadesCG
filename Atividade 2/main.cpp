@@ -1,5 +1,5 @@
+#include "obj_loader/objLoader.h"
 #include "main.h"
-#include "objLoader.h"
 #include "pipeline.h"
 
 void clearColorBuffer(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
