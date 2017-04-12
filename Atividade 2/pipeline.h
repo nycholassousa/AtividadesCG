@@ -7,6 +7,13 @@
 typedef MatrixLib Vector;
 typedef MatrixLib Matrix;
 
+//Estrutura que representa um ponto (Ponto != Pixel)
+struct Point
+{
+    int x;
+    int y;
+};
+
 /*****************************************************************/
 double norm(Matrix * mtx);
 void cross(Matrix * v1, Matrix * v2, Matrix * res);
@@ -28,7 +35,8 @@ Matrix matrix_projection(4, 4);
 Matrix matrix_viewport(4, 4);
 
 //Normalização do vetor
-double norm(Vector * vec) {
+double norm(Vector * vec)
+{
     return sqrt(
                 vec->getValue(0, 0) * vec->getValue(0, 0) +
                 vec->getValue(1, 0) * vec->getValue(1, 0) +
@@ -37,24 +45,25 @@ double norm(Vector * vec) {
 }
 
 //Produto vetorial
-void cross(Vector * v1, Vector * v2, Vector * res) {
+void cross(Vector * v1, Vector * v2, Vector * res)
+{
     res->setValue(0, 0, v1->getValue(1, 0) * v2->getValue(2, 0) - v2->getValue(1, 0) * v1->getValue(2, 0));
     res->setValue(1, 0, v1->getValue(2, 0) * v2->getValue(0, 0) - v2->getValue(2, 0) * v1->getValue(0, 0));
     res->setValue(2, 0, v1->getValue(0, 0) * v2->getValue(1, 0) - v2->getValue(0, 0) * v1->getValue(1, 0));
 }
 
 //Inicializãção das matrizes básicas
-void init() {
+void init()
+{
     matrix_model.loadIdentity();
     matrix_view.loadIdentity();
     matrix_projection.loadIdentity();
     matrix_viewport.loadIdentity();
-    
-    viewPlaneDGL(1);    
 }
 
 //Matriz de escala
-void scaleGL(double x, double y, double z) {
+void scaleGL(double x, double y, double z)
+{
     Matrix scale(4, 4);
     
     scale.loadIdentity();
@@ -85,7 +94,8 @@ void shearGL(double x, double y, double z)
 }
 
 //Matriz de rotação
-void rotateGL(double angle, double x, double y, double z) {
+void rotateGL(double angle, double x, double y, double z)
+{
     Matrix rotate(4, 4);
     
     rotate.loadIdentity();
@@ -115,7 +125,8 @@ void rotateGL(double angle, double x, double y, double z) {
 }
 
 //Matriz de translação
-void translateGL(double dx, double dy, double dz) {
+void translateGL(double dx, double dy, double dz)
+{
     Matrix translate(4, 4);
     
     translate.loadIdentity();
@@ -130,7 +141,8 @@ void translateGL(double dx, double dy, double dz) {
 //Criação da Câmera
 void createCamera(double pos_x, double pos_y, double pos_z, 
     double lookat_x, double lookat_y, double lookat_z, 
-    double up_x, double up_y, double up_z) {
+    double up_x, double up_y, double up_z)
+{
     Vector x_cam(3, 1);
     Vector y_cam(3, 1);
     Vector z_cam(3, 1);
@@ -176,7 +188,8 @@ void createCamera(double pos_x, double pos_y, double pos_z,
 }
 
 //Criação da ViewPort
-void viewportGL(int x, int y, size_t width, size_t height) {
+void viewportGL(int x, int y, size_t width, size_t height)
+{
     Matrix S1(4, 4);
     Matrix S2(4, 4);
     Matrix T(4, 4);
@@ -200,7 +213,8 @@ void viewportGL(int x, int y, size_t width, size_t height) {
 }
 
 //Setando distancia D do View Plane
-void viewPlaneDGL(double dist) {
+void viewPlaneDGL(double dist)
+{
     double d = dist;
     
     matrix_projection.setValue(2, 3, d);
@@ -209,7 +223,8 @@ void viewPlaneDGL(double dist) {
 }
 
 //Criação do Pipeline em si
-Point createPipeline(double x, double y, double z) {
+Point createPipeline(double x, double y, double z)
+{
     double vert[] = {x, y, z, 1};
     Matrix vertice(4, 1);
     vertice.setValues(vert);

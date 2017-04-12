@@ -5,10 +5,6 @@
 objLoader* objData;
 double angle = 0.0f;
 
-/*****************************************************************/
-void clearColorBuffer(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
-/*****************************************************************/
-
 void MyGlDraw(void)
 {
 	//Inicializa o Pipeline, carregando a identidade nas matrizes básicas
@@ -25,18 +21,24 @@ void MyGlDraw(void)
 	viewportGL(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
 	
 	//Distância d do View Plane
-	viewPlaneDGL(2.0);
+	viewPlaneDGL(2.6);
 
 	//Matriz de Rotação
 	rotateGL(angle, 0.0f, 1.0f, 0.0f);
 	//Velocidade da rotação uniforme
-	angle += 0.1f;
+	angle += 0.0f;
 	
 	//Limpa o Color Buffer
-	clearColorBuffer(0, 0, 0, 255);
+	memset(FBptr, 0, IMAGE_WIDTH * IMAGE_HEIGHT * 4);
 	
 	//Cria os 3 vértices do triângulo
 	Pixel pixel[3];
+
+	//Cores do objeto a ser desenhado na tela
+	unsigned char red 	= 255;
+	unsigned char green = 255;
+	unsigned char blue  = 255;
+	unsigned char alpha = 0;
 	
 	for(int f = 0; f < objData->faceCount; f++) {
 		obj_face* obj = objData->faceList[f];
@@ -50,27 +52,13 @@ void MyGlDraw(void)
 			);
 			
 			//Com os pontos de coordenada de tela obtidos, cria os pixels que serão os vértices dos triângulos
-			pixel[i] = createPixel(p.x, p.y, 255, 255, 255, 0, pixel[i]);
+			pixel[i] = createPixel(p.x, p.y, red, green, blue, alpha, pixel[i]);
 		}
 		
 		//Desenha o triângulo ligando os seus vértices
 		//Utiliza o bresenham criado na atividade anterior
 		drawTriangle(pixel[0], pixel[1], pixel[2]);
 	}
-}
-
-//Limpa o color buffer, caso não seja feito, ocorre sobreposição de frame
-void clearColorBuffer(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) {
-    unsigned int color = red;
-    
-    color = color << 8;
-    color = color + green;
-    color = color << 8;
-    color = color + blue;
-    color = color << 8;
-    color = color + alpha;
-    
-    memset(FBptr, 0, IMAGE_WIDTH * IMAGE_HEIGHT * 4);
 }
 
 //********************************************************************************

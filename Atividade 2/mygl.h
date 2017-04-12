@@ -18,13 +18,6 @@ enum colors
     ALPHA = 3
 };
 
-//estrutura de do ponto (não pixel)
-struct Point
-{
-    int x;
-    int y;
-};
-
 //Pixel scructure
 struct Pixel
 {
