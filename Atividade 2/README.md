@@ -348,13 +348,11 @@ Comparando com o loader disponibilizado, dava pra notar que tinha que ser altera
 
 ### Vídeo do Funcionamento
 Abaixo coloquei um vídeo no youtube mostrando o funcionamento tanto para o obj fornecido, como para um obj de um icosaedro.
-<p align="center">
-[![Video](http://img.youtube.com/vi/YobbewFW5NU/0.jpg)](http://www.youtube.com/watch?v=YobbewFW5NU "Video Title")
-<h5 align="center">Clique na imagem para ir para o vídeo</h5>
-</p>
+
+[Clique aqui para ver o vídeo](http://www.youtube.com/watch?v=YobbewFW5NU)
 
 **Observação**:
-O vpideo dá umas travadas pois está rodando o windows 10 e dois bash do linux, assim, ficando um pouco pesado no momento da
+O vídeo dá umas travadas pois está rodando o windows 10 e dois bash do linux, assim, ficando um pouco pesado no momento da
 
 ## Dificuldades Encontradas
 Uma das dificuldades encontradas foi encontrar uma forma de como o color buffer poderia ser limpo sem usar funções do OpenGL, assim, ficando o erro da imagem abaixo:
