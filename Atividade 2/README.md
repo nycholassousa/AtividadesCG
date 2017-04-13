@@ -21,15 +21,15 @@ Nesta postagem eu irei falar um pouco da passagem entre cada etapa, mostrando di
 <p align="center">
 	<br>
 	<img src="./screenshots/objet_to_space.png"/ width=600px height=250px>
-	<h5 align="center">Figura 2 - Representação da passagem entre os espaços</h5>
+	<h5 align="center">Figura 1 - Representação da passagem entre os espaços</h5>
 	<br>
 </p>
 
 Esta etapa leva os objetos do espaço do objeto para o espaço do universo, fazendo isso da seguinte maneira: os vértices no espaço do objeto são transformados através de multiplicações do mesmo pela matriz de modelagem, onde tal matriz é composta por uma sequência de transformações geométricas que se deseja aplicar, resultando na matriz de modelagem, ou matrix model.
 
-Para criar essa matriz, foram implementados os seguintes métodos:
+Para criar essa matriz, foram implementados os métodos abaixo.
 
-- Matriz de Escala
+#### Matriz de Escala
 ```C++
 void scaleGL(double x, double y, double z)
 {
@@ -45,7 +45,7 @@ void scaleGL(double x, double y, double z)
 }
 ```
 
-- Matriz Shear
+#### Matriz Shear
 ```C++
 void shearGL(double x, double y, double z)
 {
@@ -65,7 +65,7 @@ void shearGL(double x, double y, double z)
 }
 ```
 
-- Matriz de Rotação
+#### Matriz de Rotação
 ```C++
 void rotateGL(double angle, double x, double y, double z)
 {
@@ -98,7 +98,7 @@ void rotateGL(double angle, double x, double y, double z)
 }
 ```
 
-- Matriz de Translação
+#### Matriz de Translação
 ```C++
 void translateGL(double dx, double dy, double dz)
 {
@@ -116,12 +116,78 @@ void translateGL(double dx, double dy, double dz)
 
 Como pode observar, no final de cada transformação, a matriz é multiplicada pela matriz model, assim, fazendo a composição de transformações necessárias para a mudança de espaços.
 
+### Espaço do Universo para Espaço da Câmera
+<p align="center">
+	<br>
+	<img src="./screenshots/space_to_camera.png"/ width=600px height=250px>
+	<h5 align="center">Figura 2 - Representação da passagem entre os espaços</h5>
+	<br>
+</p>
+
+Aqui é definido como a cena será vista, então, faz-se necessário configurar a câmera. A câmera possui 3 dados importantes que devem ser descritos:
+
+- Posição da Câmera: Local onde ela se encontra
+- Direction: Local para onde a câmera está "olhando"
+- Up: Fixa a câmera no eixo determinado
+
+Assim, o código para a criação da câmera, junto com a matriz de visualização, fica da seguinte maneira:
+```C++
+void createCamera(double pos_x, double pos_y, double pos_z, 
+    double lookat_x, double lookat_y, double lookat_z, 
+    double up_x, double up_y, double up_z)
+{
+    Vector x_cam(3, 1);
+    Vector y_cam(3, 1);
+    Vector z_cam(3, 1);
+
+    Matrix Bt(4, 4);
+    Matrix T(4, 4);
+    
+    Vector aux(3, 1);
+    Vector up(3, 1);
+
+    double vec_pl[] = {pos_x - lookat_x, pos_y - lookat_y, pos_z - lookat_z};
+    double vec_up[]  = {up_x, up_y, up_z};
+    
+    aux.setValues(vec_pl);
+    up.setValues(vec_up);
+    
+    z_cam.div(aux, norm(&aux));
+
+    cross(&up, &z_cam, &aux);
+    
+    x_cam.div(aux, norm(&aux));
+    
+    cross(&z_cam, &x_cam, &aux);
+    y_cam.div(aux, norm(&aux));
+    
+    double bt_mtx[] = {
+        x_cam.getValue(0, 0), x_cam.getValue(1, 0), x_cam.getValue(2, 0), 0,
+        y_cam.getValue(0, 0), y_cam.getValue(1, 0), y_cam.getValue(2, 0), 0,
+        z_cam.getValue(0, 0), z_cam.getValue(1, 0), z_cam.getValue(2, 0), 0,
+                0,                    0,                    0,            1
+    };
+    
+    Bt.setValues(bt_mtx);
+    
+    T.loadIdentity();
+    T.setValue(0, 3, -pos_x);
+    T.setValue(1, 3, -pos_y);
+    T.setValue(2, 3, -pos_z);
+    
+    matrix_view.loadIdentity();
+
+    matrix_view.mult(Bt, T);
+}
+```
+
+
 ## Dificuldades Encontradas
 Uma das dificuldades encontradas foi encontrar uma forma de como o color buffer poderia ser limpo sem usar funções do OpenGL, assim, ficando o erro da imagem abaixo:
 
 <p align="center">
 	<br>
-	<img src="./screenshots/clean_color_buffer.jpeg"/ width=600px height=250px>
+	<img src="./screenshots/clean_color_buffer.jpg"/ width=600px height=250px>
 	<h5 align="center">Imagem sem limpar o color buffer</h5>
 	<br>
 </p>
