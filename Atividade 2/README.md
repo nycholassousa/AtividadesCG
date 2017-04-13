@@ -22,7 +22,7 @@ Nesta postagem eu irei falar um pouco da passagem entre cada etapa, referenciand
 ### Espaço do Objeto para Espaço do Universo
 <p align="center">
 	<br>
-	<img src="./screenshots/objet_to_space.png"/ width=600px height=300px>
+	<img src="./screenshots/objet_to_space.png"/>
 	<h5 align="center">Figura 1 - Representação da passagem entre os espaços</h5>
 	<br>
 </p>
@@ -110,7 +110,7 @@ Como dito anteriormente, a matriz model é o produto das matrizes de transforma�
 ### Espaço do Universo para Espaço da Câmera
 <p align="center">
 	<br>
-	<img src="./screenshots/space_to_camera.png"/ width=600px height=250px>
+	<img src="./screenshots/space_to_camera.png"/ >
 	<h5 align="center">Figura 2 - Representação da passagem entre os espaços</h5>
 	<br>
 </p>
@@ -349,12 +349,12 @@ Comparando com o loader disponibilizado, dava pra notar que tinha que ser altera
 ### Vídeo do Funcionamento
 Abaixo coloquei um vídeo no youtube mostrando o funcionamento tanto para o obj fornecido, como para um obj de um icosaedro.
 <p align="center">
-[![Youtube Video](https://img.youtube.com/vi/YobbewFW5NU/0.jpg)](https://www.youtube.com/watch?v=YobbewFW5NU)
+[![Video](http://img.youtube.com/vi/YobbewFW5NU/0.jpg)](http://www.youtube.com/watch?v=YobbewFW5NU "Video Title")
 <h5 align="center">Clique na imagem para ir para o vídeo</h5>
 </p>
 
 **Observação**:
-O vpideo dá umas travadas pois está rodando o windows 10 e dois bash do linux, assim, ficando um pouco pesado no momento da gravação
+O vpideo dá umas travadas pois está rodando o windows 10 e dois bash do linux, assim, ficando um pouco pesado no momento da
 
 ## Dificuldades Encontradas
 Uma das dificuldades encontradas foi encontrar uma forma de como o color buffer poderia ser limpo sem usar funções do OpenGL, assim, ficando o erro da imagem abaixo:
