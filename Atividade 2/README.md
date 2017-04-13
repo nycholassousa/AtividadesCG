@@ -17,18 +17,7 @@ O pipeline é composto por 6 principais etapas, que são:
 
 Nesta postagem eu irei falar um pouco da passagem entre cada etapa, mostrando diretamente no código o que foi feito (não irei repetir o que foi dado em sala de aula).
 
-### Espaço do Objeto para Espaço do Universo
-<p align="center">
-	<br>
-	<img src="./screenshots/objet_to_space.png"/ width=600px height=250px>
-	<h5 align="center">Figura 1 - Representação da passagem entre os espaços</h5>
-	<br>
-</p>
-
-Esta etapa leva os objetos do espaço do objeto para o espaço do universo, fazendo isso da seguinte maneira: os vértices no espaço do objeto são transformados através de multiplicações do mesmo pela matriz de modelagem, onde tal matriz é composta por uma sequência de transformações geométricas que se deseja aplicar, resultando na matriz de modelagem, ou matrix model.
-
-Para criar essa matriz, foram implementados os métodos abaixo.
-
+### Construção das Matrizes
 #### Matriz de Escala
 ```C++
 void scaleGL(double x, double y, double z)
@@ -64,7 +53,6 @@ void shearGL(double x, double y, double z)
     matrix_model.mult(matrix_model, shear);
 }
 ```
-
 #### Matriz de Rotação
 ```C++
 void rotateGL(double angle, double x, double y, double z)
@@ -114,23 +102,7 @@ void translateGL(double dx, double dy, double dz)
 }
 ```
 
-Como pode observar, no final de cada transformação, a matriz é multiplicada pela matriz model, assim, fazendo a composição de transformações necessárias para a mudança de espaços.
-
-### Espaço do Universo para Espaço da Câmera
-<p align="center">
-	<br>
-	<img src="./screenshots/space_to_camera.png"/ width=600px height=250px>
-	<h5 align="center">Figura 2 - Representação da passagem entre os espaços</h5>
-	<br>
-</p>
-
-Aqui é definido como a cena será vista, então, faz-se necessário configurar a câmera. A câmera possui 3 dados importantes que devem ser descritos:
-
-- Posição da Câmera: Local onde ela se encontra
-- Direction: Local para onde a câmera está "olhando"
-- Up: Fixa a câmera no eixo determinado
-
-Assim, o código para a criação da câmera, junto com a matriz de visualização, fica da seguinte maneira:
+### Criação da Câmera - Matriz View
 ```C++
 void createCamera(double pos_x, double pos_y, double pos_z, 
     double lookat_x, double lookat_y, double lookat_z, 
@@ -180,6 +152,63 @@ void createCamera(double pos_x, double pos_y, double pos_z,
     matrix_view.mult(Bt, T);
 }
 ```
+
+#### Criação do View Plane - Matriz Projection
+```C++
+void viewPlaneDGL(double dist)
+{
+    double d = dist;
+    
+    matrix_projection.setValue(2, 3, d);
+    matrix_projection.setValue(3, 2, (-1) / d);
+    matrix_projection.setValue(3, 3, 0);
+}
+```
+
+### Espaço do Objeto para Espaço do Universo
+<p align="center">
+	<br>
+	<img src="./screenshots/objet_to_space.png"/ width=600px height=250px>
+	<h5 align="center">Figura 1 - Representação da passagem entre os espaços</h5>
+	<br>
+</p>
+
+Esta etapa leva os objetos do espaço do objeto para o espaço do universo, fazendo isso da seguinte maneira: os vértices no espaço do objeto são transformados através de multiplicações do mesmo pela matriz de modelagem, onde tal matriz é composta por uma sequência de transformações geométricas que se deseja aplicar, resultando na matriz de modelagem, ou matriz model.
+
+Para criar esse produto de matrizes que gera a matriz model, são utilizadas as seguintes matrizes:
+
+* [Matriz Escala](#matriz-de-escala)
+* [Matriz Shear](#matriz-shear)
+* [Matriz de Rotação](#matriz-de-rotacao)
+* [Matriz de Translação](#matriz-de-translacao)
+
+### Espaço do Universo para Espaço da Câmera
+<p align="center">
+	<br>
+	<img src="./screenshots/space_to_camera.png"/ width=600px height=250px>
+	<h5 align="center">Figura 2 - Representação da passagem entre os espaços</h5>
+	<br>
+</p>
+
+Aqui é definido como a cena será vista, então, faz-se necessário configurar a câmera. A câmera possui 3 dados importantes que devem ser descritos:
+
+- Posição da Câmera: Local onde ela se encontra
+- Direction: Local para onde a câmera está "olhando"
+- Up: Fixa a câmera no eixo determinado
+
+Assim, é criado o código que representa a [Criação da Câmera]()
+
+
+### Espaço do Câmera para Espaço de Recorte
+Nesta etapa, os pontos que estão no espaço da câmera são movidos para o espaço de recorte. É interessante ressaltar que é nessa etapa onde ocorre a distorção perspectiva - objetos mais próximos do view plane aparentam ser maiores do que objetos que estão mais distantes.
+
+Com isso, fica o trecho do código abaixo dessa etapa:
+
+
+Neste trecho de código a matriz de projeção já tinha sido criada e carregada com a identidade, assim, foi necessário apenas a alteração dos valores em algumas partes da matriz.
+
+### Espaço de Recorte para Espaço Canônico
+Aqui ocorre a homogeneização, que no caso, significa dividir todos os componentes do vértice pela sua coordenada homogênea.
 
 
 ## Dificuldades Encontradas
