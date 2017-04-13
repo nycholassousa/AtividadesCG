@@ -4,14 +4,129 @@
 O objetivo deste trabalho é familiarizar os alunos com a estrutura e o funcionamento do pipeline gráfico através da implementação de um pipeline completo, capaz de transformar vértices descritos no espaço do objeto em primitivas rasterizadas no espaço de tela.[1] 
 
 ## O que é um Pipeline Gráfico
-TODO
+Pipeline Gráfico é uma sequência de passos para transformar a descrição matemática/geométrica de uma cena em uma imagem discreta na tela.[2] Ou seja, passos na computação gráfica capaz de transformar um objeto de 3D para que seja mostrado na tela, em 2D.
+
+O pipeline é composto por 6 principais etapas, que são:
+
+- Espaço do Objeto
+- Espaço do Universo
+- Espaço da Câmera
+- Espaço de Recorte
+- Espaço Canônico
+- Espaço de Tela
+
+Nesta postagem eu irei falar um pouco da passagem entre cada etapa, mostrando diretamente no código o que foi feito (não irei repetir o que foi dado em sala de aula).
+
+### Espaço do Objeto para Espaço do Universo
+<p align="center">
+	<br>
+	<img src="./screenshots/objet_to_space.png"/ width=600px height=250px>
+	<h5 align="center">Figura 2 - Representação da passagem entre os espaços</h5>
+	<br>
+</p>
+
+Esta etapa leva os objetos do espaço do objeto para o espaço do universo, fazendo isso da seguinte maneira: os vértices no espaço do objeto são transformados através de multiplicações do mesmo pela matriz de modelagem, onde tal matriz é composta por uma sequência de transformações geométricas que se deseja aplicar, resultando na matriz de modelagem, ou matrix model.
+
+Para criar essa matriz, foram implementados os seguintes métodos:
+
+- Matriz de Escala
+```C++
+void scaleGL(double x, double y, double z)
+{
+    Matrix scale(4, 4);
+    
+    scale.loadIdentity();
+    
+    scale.setValue(0, 0, x);
+    scale.setValue(1, 1, y);
+    scale.setValue(2, 2, z);
+    
+    matrix_model.mult(matrix_model, scale);
+}
+```
+
+- Matriz Shear
+```C++
+void shearGL(double x, double y, double z)
+{
+    Matrix shear(4, 4);
+    shear.loadIdentity();
+
+    shear.setValue(0, 1, x);
+    shear.setValue(0, 2, x);
+
+    shear.setValue(1, 0, y);
+    shear.setValue(1, 2, y);
+
+    shear.setValue(2, 0, z);
+    shear.setValue(2, 1, z);
+
+    matrix_model.mult(matrix_model, shear);
+}
+```
+
+- Matriz de Rotação
+```C++
+void rotateGL(double angle, double x, double y, double z)
+{
+    Matrix rotate(4, 4);
+    
+    rotate.loadIdentity();
+    
+    if(x > 0.0) {
+        rotate.setValue(1, 1, cos(angle));
+        rotate.setValue(1, 2, -sin(angle));
+        rotate.setValue(2, 1, sin(angle));
+        rotate.setValue(2, 2, cos(angle));
+    }
+    
+    if(y > 0.0) {
+        rotate.setValue(0, 0, cos(angle));
+        rotate.setValue(0, 2, sin(angle));
+        rotate.setValue(2, 0, -sin(angle));
+        rotate.setValue(2, 2, cos(angle));
+    }
+    
+    if(z > 0.0) {
+        rotate.setValue(0, 0, cos(angle));
+        rotate.setValue(0, 1, -sin(angle));
+        rotate.setValue(1, 0, sin(angle));
+        rotate.setValue(1, 1, cos(angle));
+    }
+    
+    matrix_model.mult(matrix_model, rotate);
+}
+```
+
+- Matriz de Translação
+```C++
+void translateGL(double dx, double dy, double dz)
+{
+    Matrix translate(4, 4);
+    
+    translate.loadIdentity();
+    
+    translate.setValue(0, 3, dx);
+    translate.setValue(1, 3, dy);
+    translate.setValue(2, 3, dz);
+    
+    matrix_model.mult(matrix_model, translate);
+}
+```
+
+Como pode observar, no final de cada transformação, a matriz é multiplicada pela matriz model, assim, fazendo a composição de transformações necessárias para a mudança de espaços.
 
 ## Dificuldades Encontradas
 Uma das dificuldades encontradas foi encontrar uma forma de como o color buffer poderia ser limpo sem usar funções do OpenGL, assim, ficando o erro da imagem abaixo:
 
-![Imagem sem limpar o color buffer](screenshots/clean_color_buffer.jpg)
+<p align="center">
+	<br>
+	<img src="./screenshots/clean_color_buffer.jpeg"/ width=600px height=250px>
+	<h5 align="center">Imagem sem limpar o color buffer</h5>
+	<br>
+</p>
 
-Para corrigir isso, notei que poderia usar o **memset**[2], da seguinte maneira:
+Para corrigir isso, notei que poderia usar o **memset**[3], da seguinte maneira:
 	
 	memset(FBptr, 0, IMAGE_WIDTH * IMAGE_HEIGHT * 4)
 
@@ -20,4 +135,7 @@ Com isso, o FBprt foi preenchido com 0, no tamanho da conta feito pela tela, ou 
 ## Referências
 
 [1] Definição do Trabalho Proposto para cadeira de ICG, Professor Christian A. P.
+
+[2] Notas de Aula do Professor Christian A. P.
+
 [2] http://en.cppreference.com/w/cpp/string/byte/memset
