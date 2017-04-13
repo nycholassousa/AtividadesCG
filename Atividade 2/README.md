@@ -370,6 +370,10 @@ Para corrigir isso, notei que poderia usar o **memset**[3], da seguinte maneira:
 
 Com isso, o FBprt foi preenchido com 0, no tamanho da conta feito pela tela, ou seja, a tela foi limpa com a cor preta a cada frame.
 
+## Melhorias
+Uma das melhorias que tenho em mente no momento seria lançar exceções, visto que há algumas contas com matrizes que poderia causar alguns erros, se não feito corretamente, junto com as operações matemáticas necessárias.
+Além disso, melhorias no loader, visto que dependendo do tamanho do OBJ, não chegava nem a carregar ou causava algum erro quando carregava (por exemplo, a tela ficava totalmente preta).
+
 ## Referências
 
 [1] Definição do Trabalho Proposto para cadeira de ICG, Professor Christian A. P.
