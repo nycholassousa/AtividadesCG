@@ -26,7 +26,7 @@ void MyGlDraw(void)
 	//Matriz de Rotação
 	rotateGL(angle, 0.0f, 1.0f, 0.0f);
 	//Velocidade da rotação uniforme
-	angle += 0.0f;
+	angle += 0.01f;
 	
 	//Limpa o Color Buffer
 	memset(FBptr, 0, IMAGE_WIDTH * IMAGE_HEIGHT * 4);
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 	//Cria o objeto que carrega o modelo
 	objData = new objLoader();
 	//A carga do modelo é indicada atraves do nome do arquivo. 
-	objData->load((char*)"monkey_head2.obj");
+	objData->load((char*)argv[1]);
 
 	//Inicializações.
 	InitOpenGL(&argc, argv);

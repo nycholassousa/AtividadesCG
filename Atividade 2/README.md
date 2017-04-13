@@ -22,7 +22,7 @@ Nesta postagem eu irei falar um pouco da passagem entre cada etapa, referenciand
 ### Espaço do Objeto para Espaço do Universo
 <p align="center">
 	<br>
-	<img src="./screenshots/objet_to_space.png"/ width=600px height=250px>
+	<img src="./screenshots/objet_to_space.png"/ width=600px height=300px>
 	<h5 align="center">Figura 1 - Representação da passagem entre os espaços</h5>
 	<br>
 </p>
@@ -182,9 +182,9 @@ vertice.mult(matrix_view, vertice);
 ### Espaço do Câmera para Espaço de Recorte
 Nesta etapa, os pontos que estão no espaço da câmera são movidos para o espaço de recorte. É interessante ressaltar que é nessa etapa onde ocorre a distorção perspectiva - objetos mais próximos do view plane aparentam ser maiores do que objetos que estão mais distantes.
 
-Aqui, a matriz de projeção é criada/sofre alterações para que ocorra a distorça perspectiva.
+Aqui, a matriz de projeção é criada/sofre alterações para que ocorra a distorção perspectiva.
 
-Assim, é criado o código que representa a Matrize de Projeção:
+Assim, é criado o código que representa a Matriz de Projeção:
 
 #### Criação do View Plane - Matriz Projection
 ```C++
@@ -307,7 +307,7 @@ void MyGlDraw(void)
 	Pixel pixel[3];
 
 	//Cores do objeto a ser desenhado na tela
-	unsigned char red 	= 255;
+	unsigned char red   = 255;
 	unsigned char green = 255;
 	unsigned char blue  = 255;
 	unsigned char alpha = 0;
@@ -341,20 +341,28 @@ Esta função usa todo o código criado tanto desta atividade como da atividade 
 Comparando com o loader disponibilizado, dava pra notar que tinha que ser alterado o valor d do *view plane* para ficar o mais parecido possível, com isso, abaixo está a imagem de comparação com d = 2.6:
 <p align="center">
     <br>
-    <img src="./screenshots/comparison.jpg"/ width=600px height=250px>
+    <img src="./screenshots/comparison.jpg"/ >
     <h5 align="center">Figura 3 - Comparação entre o OBJ Loader e "meu OpenGL"</h5>
     <br>
 </p>
 
-### Utilizando outros objs
+### Vídeo do Funcionamento
+Abaixo coloquei um vídeo no youtube mostrando o funcionamento tanto para o obj fornecido, como para um obj de um icosaedro.
+<p align="center">
+[![Youtube Video](https://img.youtube.com/vi/YobbewFW5NU/0.jpg)](https://www.youtube.com/watch?v=YobbewFW5NU)
+<h5 align="center">Clique na imagem para ir para o vídeo</h5>
+</p>
+
+**Observação**:
+O vpideo dá umas travadas pois está rodando o windows 10 e dois bash do linux, assim, ficando um pouco pesado no momento da gravação
 
 ## Dificuldades Encontradas
 Uma das dificuldades encontradas foi encontrar uma forma de como o color buffer poderia ser limpo sem usar funções do OpenGL, assim, ficando o erro da imagem abaixo:
 
 <p align="center">
 	<br>
-	<img src="./screenshots/clean_color_buffer.jpg"/ width=600px height=250px>
-	<h5 align="center">Imagem sem limpar o color buffer</h5>
+	<img src="./screenshots/clean_color_buffer.jpg"/ >
+	<h5 align="center">Figura 4 - Imagem sem limpar o color buffer</h5>
 	<br>
 </p>
 
